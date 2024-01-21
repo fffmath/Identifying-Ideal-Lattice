@@ -2,7 +2,7 @@
 
   
 
-This Python script implements algorithms for identifying ideal lattices using incomplete Hermite normal form (IHN-F), complete factorization and partial Hermite normal form (CFP-IHNF), and complete factorization and partial order ideal Hermite normal form (CFP-OIHN-F). Additionally, it includes a procedure for identifying ideal lattices using determinant lifting (DL).
+This Python script implements algorithms for identifying ideal lattices using Incomplete Hermite normal form (ihnf) and Optimal Incomplete Hermite normal form (oihnf). Additionally, it includes a procedure for identifying ideal lattices using algorithm in [DL07].
 
   
 
