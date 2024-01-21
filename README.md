@@ -2,13 +2,13 @@
 
   
 
-This Python script implements algorithms for identifying ideal lattices using Incomplete Hermite normal form (ihnf) and Optimal Incomplete Hermite normal form (oihnf). Additionally, it includes a procedure for identifying ideal lattices using algorithm in [DL07].
+This Python script implements algorithms for identifying ideal lattices using Incomplete Hermite normal form (ihnf) and Optimal Incomplete Hermite normal form (oihnf). Additionally, it includes an algorithm called identity_ideal_dl for identifying ideal lattices using algorithm in [DL07].
 
   
 
 ## Usage
 
-### Environmen
+### Environment
 
 Make sure you have SageMath version 9.8 installed in your runtime environment. You can find the download link on the official SageMath website: https://www.sagemath.org/download.html
 
