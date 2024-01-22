@@ -328,7 +328,7 @@ class IdentifyingLattice(LatticeGenerator):
 
     def identifying_ideal_dl2(self, input_matrix, method='inverse'):
         """
-        Identify ideal lattice using the determinant lifting (DL) method.
+        Identify ideal lattice using algorithm in [DL07].
 
         Parameters:
         - input_matrix: The input matrix representing an upper triangular matrix.
