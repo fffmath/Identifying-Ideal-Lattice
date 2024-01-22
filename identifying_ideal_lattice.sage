@@ -474,7 +474,7 @@ if __name__ == "__main__":
 
     # Set other parameters as needed (e.g., dl_method)
     # 'lattice' or 'ideal_lattice'
-    generate_method = 'ideal_lattice'
+    generate_method = 'lattice'
     # 'ihnf' or 'oihnf'
     cfp_method = 'ihnf'
     # 'inverse', 'sage', or 'dl'
