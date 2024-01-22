@@ -8,9 +8,9 @@ import sage.matrix.matrix_integer_dense_hnf as matrix_integer_dense_hnf
 logging.basicConfig(filename='identifying_ideal_lattice.log', level=logging.WARN, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class LatticeGenerator:
-    def __init__(self, dim, bound=10, seed=None, max_attempts=10):
+    def __init__(self, dim, bound=3, seed=None, max_attempts=10):
         self.dim = dim
-        self.bound = bound
+        self.bound = 2^bound
         self.seed = seed
         self.max_attempts = max_attempts
 
@@ -62,7 +62,11 @@ class LatticeGenerator:
             # Generate f and g
             f = [ZZ(randint(-1 * self.bound, self.bound)) for _ in range(self.dim)]
             f.append(1)
+            logging.info(f"Generated f")
+            logging.debug(f"Generated f: {f}")
             g = [ZZ(randint(-1 * self.bound, self.bound)) for _ in range(self.dim)]
+            logging.info(f"Generated g")
+            logging.debug(f"Generated g: {f}")
 
             # Generate ZZ[x]/(f)
             R = PolynomialRing(ZZ, 'xx')
@@ -466,7 +470,7 @@ if __name__ == "__main__":
 
     # Set other parameters as needed (e.g., dl_method)
     # 'lattice' or 'ideal_lattice'
-    generate_method = 'ideal_lattice'
+    generate_method = 'lattice'
     # 'ihnf' or 'oihnf'
     cfp_method = 'ihnf'
     # 'inverse', 'sage', or 'dl'
