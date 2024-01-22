@@ -402,7 +402,7 @@ def main(dim, bound, experiment_num, generate_method='lattice', cfp_method='ihnf
     cfp_time = []
     dl_time = []
     seed_list = []
-    csv_file_path = f'output_dim_{dim}_bound_{bound}_num_{experiment_num}.csv'
+    csv_file_path = f'{generate_method}/output_dim_{dim}_bound_{bound}_num_{experiment_num}.csv'
 
     for i in range(experiment_num):
         # Generate a lattice
@@ -447,6 +447,10 @@ def main(dim, bound, experiment_num, generate_method='lattice', cfp_method='ihnf
     data = list(zip(seed_list, cfp_result, dl_result, cfp_time, dl_time))
 
     # Use the csv module to write data to the CSV file
+    directory = os.path.dirname(csv_file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
         
@@ -470,7 +474,7 @@ if __name__ == "__main__":
 
     # Set other parameters as needed (e.g., dl_method)
     # 'lattice' or 'ideal_lattice'
-    generate_method = 'lattice'
+    generate_method = 'ideal_lattice'
     # 'ihnf' or 'oihnf'
     cfp_method = 'ihnf'
     # 'inverse', 'sage', or 'dl'
