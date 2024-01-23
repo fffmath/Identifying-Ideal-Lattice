@@ -62,11 +62,7 @@ class LatticeGenerator:
             # Generate f and g
             f = [ZZ(randint(-1 * self.bound, self.bound)) for _ in range(self.dim)]
             f.append(1)
-            logging.info(f"Generated f")
-            logging.debug(f"Generated f: {f}")
             g = [ZZ(randint(-1 * self.bound, self.bound)) for _ in range(self.dim)]
-            logging.info(f"Generated g")
-            logging.debug(f"Generated g: {f}")
 
             # Generate ZZ[x]/(f)
             R = PolynomialRing(ZZ, 'xx')
@@ -80,6 +76,10 @@ class LatticeGenerator:
             # Check if the determinant of the matrix is zero
             if lattice_matrix.det() != 0:
                 logging.info(f"######### Generated ideal lattice with seed: {self.seed} #########")
+                logging.info(f"Generated f")
+                logging.debug(f"Generated f: {f}")
+                logging.info(f"Generated g")
+                logging.debug(f"Generated g: {f}")
                 logging.info(f"Generated ideal lattice matrix")
                 logging.debug(f"Generated ideal lattice matrix:\n{lattice_matrix}")
                 return lattice_matrix, self.seed
@@ -417,10 +417,13 @@ def main(dim, bound, experiment_num, generate_method='lattice', cfp_method='ihnf
         # Determine whether it is an ideal lattice
         if result is not None:
             lattice_matrix, used_seed = result
+            seed_list.append(used_seed)
             # Measure the time taken by identifying_ideal_cfp
             start_time_cfp = time.time()
             result_cfp = identifying_lattice.identifying_ideal_cfp(lattice_matrix, method=cfp_method)
             end_time_cfp = time.time()
+            cfp_result.append(result_cfp)
+            cfp_time.append(end_time_cfp - start_time_cfp)
             # Measure the time taken by identifying_ideal_dl
             reverse_matrix4dl = identifying_lattice.reverse_matrix_rows(lattice_matrix)
             start_time_dl1 = time.time()
@@ -430,18 +433,20 @@ def main(dim, bound, experiment_num, generate_method='lattice', cfp_method='ihnf
             start_time_dl2 = time.time()
             result_dl = identifying_lattice.identifying_ideal_dl2(matrix4dl_pre, method=dl_method)
             end_time_dl2 = time.time()
-            cfp_result.append(result_cfp)
             dl_result.append(result_dl)
-            cfp_time.append(end_time_cfp - start_time_cfp)
             dl_time.append(end_time_dl2 - start_time_dl2 + end_time_dl1 - start_time_dl1)
-            seed_list.append(used_seed)
+            '''
+            dl_time.append(0)
+            dl_result.append('None')
+            '''
         else:
             print("Unable to generate a non-zero determinant matrix after multiple attempts.")
+            seed_list.append('None')
             cfp_time.append(0)
+            cfp_result.append('None')
             dl_time.append(0)
-            cfp_result.append(None)
-            dl_result.append(None)
-            seed_list.append(None)
+            dl_result.append('None')
+
     
     # Combine the four lists into a list where each element is a sublist containing four values
     data = list(zip(seed_list, cfp_result, dl_result, cfp_time, dl_time))
