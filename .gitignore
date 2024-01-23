@@ -4,3 +4,4 @@ identifying_ideal_lattice.log
 data_visualization.ipynb
 identifying_ideal_lattice.sage.py
 output.txt
+run_experiments.sh
