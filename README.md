@@ -19,7 +19,7 @@ Usage: sage identifying_ideal_lattice.sage `<dim>` `<bound>` `<experiment_num>`
 sage identifying_ideal_lattice.sage 3 10 10
 
 ```
-Or, you can use a Bash script if you want to obtain experimental results under different parameters at once. All you need to do is add the target parameters in the run_experiments.sh. Then, you can get an output.txt as the output.
+Or, you can use the Bash script if you want to obtain experimental results under different parameters at once. All you need to do is add the target parameters in the run_experiments.sh. Then, you can get an output.txt as the output.
 
 ```bash
 
