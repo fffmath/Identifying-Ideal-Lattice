@@ -2,7 +2,7 @@
 
   
 
-This Python script implements algorithms for identifying ideal lattices using Incomplete Hermite normal form (ihnf) and Optimal Incomplete Hermite normal form (oihnf). Additionally, it includes an algorithm called identity_ideal_dl for identifying ideal lattices using algorithm in [DL07].
+This Python script implements algorithms for identifying ideal lattices using Incomplete Hermite normal form (ihnf) and Optimal Incomplete Hermite normal form (oihnf).More details can be found in our paper [here](https://arxiv.org/abs/2307.12497). Additionally, it includes an algorithm called identity_ideal_dl for identifying ideal lattices using algorithm in [[DL07]](https://eprint.iacr.org/2007/322).
 
   
 
@@ -10,6 +10,23 @@ This Python script implements algorithms for identifying ideal lattices using In
 
 Usage: sage identifying_ideal_lattice.sage `<dim>` `<bound>` `<experiment_num>`
 
+##### Example Usage
+
+```bash
+
+# Run experiments 10 times with dimensions set to 3 and a bound of 2^10.
+
+sage identifying_ideal_lattice.sage 3 10 10
+
+```
+Or, you can use a Bash script if you want to obtain experimental results under different parameters at once. All you need to do is add the target parameters in the run_experiments.sh. Then, you can get an output.txt as the output.
+
+```bash
+
+# If you haven't modified the run_experiments.sh script, it will run experiments under each set of parameters (dim, bound, experiment_num) equal to (3, 5, 5) and (3, 10, 5).
+bash run_experiments.sh
+
+```
 ### Environment
 
 Make sure you have SageMath version 9.8 installed in your runtime environment. You can find the download link on the official SageMath website: https://www.sagemath.org/download.html
@@ -37,15 +54,6 @@ Make sure to have SageMath installed, as it provides the necessary library for t
 
 - `experiment_num`: Integer indicating the number of experiments to conduct.
 
-##### Example Usage
-
-```bash
-
-# Run experiments 10 times with dimensions set to 3 and a bound of 2^10.
-
-sage identifying_ideal_lattice.sage 3 10 10
-
-```
 
 ### Output
 
