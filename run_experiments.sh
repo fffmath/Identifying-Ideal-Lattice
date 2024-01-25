@@ -2,7 +2,8 @@
 
 # Array of parameters
 params=(
-    "100 10 5"
+    "3 5 5"
+    "3 10 5"
 
     # Add more parameter combinations as needed
 )
