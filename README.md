@@ -162,7 +162,7 @@ def identifying_ideal_dl2(self, input_matrix, method='inverse'):
 
 ### Author
 
-You can find more information on [my personal website](www.fffmath.com).
+You can find more information on [my personal website](https://www.fffmath.com/).
 
 ### License
 
