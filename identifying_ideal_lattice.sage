@@ -79,7 +79,7 @@ class LatticeGenerator:
                 logging.info(f"Generated f")
                 logging.debug(f"Generated f: {f}")
                 logging.info(f"Generated g")
-                logging.debug(f"Generated g: {f}")
+                logging.debug(f"Generated g: {g}")
                 logging.info(f"Generated ideal lattice matrix")
                 logging.debug(f"Generated ideal lattice matrix:\n{lattice_matrix}")
                 return lattice_matrix, self.seed
@@ -124,15 +124,14 @@ class IdentifyingLattice(LatticeGenerator):
             bi = temp[iter_num, self.dim - 1]
             bi1 = temp[iter_num + 1, self.dim - 1]
             if bi == 0 and bi1 == 0:
-                logging.info(f"Skipping update due to zero determinant condition.")
-                logging.debug(f"iter_num={iter_num}, Skipping update due to zero determinant condition.")
+                logging.debug(f"Skipping update due to zero determinant condition.")
                 iter_num += 2
             elif bi == 0:
-                logging.info(f"Skipping update due to zero determinant condition.")
+                logging.debug(f"Skipping update due to zero determinant condition.")
                 iter_num += 1
             elif bi1 == 0:
                 temp[iter_num:iter_num + 2] = matrix([[0, 1], [1, 0]]) * temp[iter_num:iter_num + 2]
-                logging.info(f"Updated matrix: Swap rows {iter_num} and {iter_num+1}") 
+                logging.debug(f"Updated matrix: Swap rows {iter_num} and {iter_num+1}") 
                 logging.debug(f"Updated matrix:\n{temp}")
                 iter_num += 1
             else:
@@ -140,7 +139,7 @@ class IdentifyingLattice(LatticeGenerator):
                 d, x, y = xgcd(bi, bi1)
                 
                 # Log information
-                logging.info(f"Updated matrix: Extended Euclidean Algorithm: x={x}, y={y}, d={d}") 
+                logging.debug(f"Updated matrix: Extended Euclidean Algorithm: x={x}, y={y}, d={d}") 
 
                 # Step 3: Update matrix
                 update_matrix = matrix([[-bi1/d, bi/d], [x, y]])
@@ -162,14 +161,29 @@ class IdentifyingLattice(LatticeGenerator):
         logging.debug(f"(0|D)* B^{-1}:\n{temp}")
         if self.divide_lattice(input_matrix, d) is False:
             logging.info("identifying_ideal_cfp completed.")
-            return False
+            return False, None
         elif self.decide_integer_lattice(temp) is False:
             logging.info("identifying_ideal_cfp completed.")
-            return False
+            return False, None
         else:
             logging.info("identifying_ideal_cfp completed.")
-            return True
-    
+            # Build the resulting tuple
+            R = PolynomialRing(ZZ, 'x')
+            temp_list=((matrix(1,1,[0]).augment(ihnf_matrix[self.dim-1,0:self.dim-1]))/d).list()
+            temp_list=temp_list+[1]
+            polynomial = R(temp_list)
+            result_tuple = (
+                polynomial,
+                [list(row) for row in (input_matrix/d).rows()]
+            )
+            return True, result_tuple
+
+    def reverse_matrix_row(self, input_matrix):
+        reverse_matrix_row_result = matrix(1, self.dim, [0]*self.dim)
+        for jj in range(self.dim):
+            reverse_matrix_row_result[0,jj]=input_matrix[0,self.dim-1-jj]
+        return reverse_matrix_row_result
+
     def reverse_matrix_rows(self, input_matrix):
         reverse_result_rows = identity_matrix(self.dim)
         for ii in range(self.dim):
@@ -198,14 +212,23 @@ class IdentifyingLattice(LatticeGenerator):
                     logging.debug(f"(D|0)* B^{-1}:\n{temp}")
                     if self.decide_integer_lattice(temp) is True:
                         logging.info("identifying_ideal_cfp completed.")
-                        return True
+                        # Build the resulting tuple
+                        R = PolynomialRing(ZZ, 'x')
+                        temp_list=self.reverse_matrix_row((B_prime[0,1:self.dim].augment(matrix(1,1,[0])))/B_prime[0,0]).list()
+                        temp_list=temp_list+[1]
+                        polynomial = R(temp_list)
+                        result_tuple = (
+                            polynomial,
+                            [list(row) for row in (input_matrix/B_prime[0,0]).rows()]
+                        )
+                        return True, result_tuple
                     else:
                         logging.info("identifying_ideal_cfp completed.")
-                        return False
+                        return False, None
                 else:
                     logging.info("identifying_ideal_cfp completed.")
-                    return False
-        return False
+                    return False, None
+        return False, None
 
 
 
@@ -216,7 +239,7 @@ class IdentifyingLattice(LatticeGenerator):
             return self.identifying_ideal_cfp_oihnf(input_matrix)
         else:
             logging.warning("Invalid method.")
-            return False    
+            return False, None    
 
     def adjugate_of_upper_triangular_dl(self,input_matrix,det):
         """
@@ -342,7 +365,6 @@ class IdentifyingLattice(LatticeGenerator):
         logging.info(f"Complete Matrix B in Step 1 in Algorithm 1")
         logging.debug(f"Matrix B:\n{B}")
         det = prod(B[i, i] for i in range(self.dim))
-        #det = B.det()
         logging.info(f"Complete determinate of B in Step 2 in Algorithm 1")
         logging.debug(f"Determinate of B: {det}")
         if method=='inverse':
@@ -353,7 +375,7 @@ class IdentifyingLattice(LatticeGenerator):
             A = self.adjugate_of_upper_triangular_dl(B, det)
         else:
             logging.warning("Invalid method.")
-            return False
+            return False, None
         logging.info(f"Complete Matrix A in Step 2 in Algorithm 1")
         logging.debug(f"Matrix A:\n{A}")
         z = B[self.dim-1, self.dim-1]
@@ -372,7 +394,7 @@ class IdentifyingLattice(LatticeGenerator):
             logging.debug(f"c: {c}")
         else:
             logging.info("Invalid conditions for c calculation.")
-            return False
+            return False, None
 
         # Check if z divides each coefficient ci
         if all(c[i] % z == 0 for i in range(self.dim)):
@@ -386,13 +408,16 @@ class IdentifyingLattice(LatticeGenerator):
             logging.debug(f"q_star: {q_star}")
         else:
             logging.info("z does not divide all coefficients.")
-            return False
+            return False, None
 
         if B * matrix(q_star) % (det / z) == 0:
-            return True
+            result_list=((B*q_star/det).transpose()).list()+[1]
+            R = PolynomialRing(ZZ, 'x')
+            polynomial = R(result_list)
+            return True, polynomial
         else:
             logging.info("B * matrix(q_star) % (det / z) is not zero.")
-            return False
+            return False, None
 
 def main(dim, bound, experiment_num, generate_method='lattice', cfp_method='ihnf', dl_method='inverse'):
     seed = None

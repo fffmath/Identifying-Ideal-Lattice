@@ -63,10 +63,10 @@ The `main` function conducts experiments to identify ideal lattices using variou
 
 	- `seed`: Seed used for lattice generation.
 	
-	- `cfp_result`: Result of identifying ideal lattice using CFP.
-		
-	- `dl_result`: Result of identifying ideal lattice using DL.
-	
+    - `cfp_result`: Result of identifying an ideal lattice using CFP. If the input matrix can be viewed as an ideal lattice, then this algorithm will output a tuple: `（True, (a polynomial, a basis matrix))`. If it is not an ideal lattice, the result will be `(False, None)`.
+
+    - `dl_result`: Result of identifying an ideal lattice using DL. If the input matrix can be viewed as an ideal lattice, then this algorithm will output `(True, a polynomial)`. If it is not an ideal lattice, the result will be `(False, None)`.
+        
 	- `cfp_time`: Time taken by CFP method.
 		
 	- `dl_time`: Time taken by DL method.
