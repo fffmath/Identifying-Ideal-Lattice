@@ -166,4 +166,4 @@ You can find more information on [my personal website](https://www.fffmath.com/)
 
 ### License
 
-This script is released under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+This script is released under the MIT License 2.0. See the [LICENSE](LICENSE) file for details.
